@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compras Online - Varejão Santa Catarina</title>
+    <meta name="description" content="Faça suas compras online no Varejão Santa Catarina. Frutas, verduras e legumes frescos entregues na sua casa!">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .voltar {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.3s;
+        }
+
+        .header .voltar:hover {
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cart-icon:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff5722;
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Layout Principal */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Seção de Produtos */
+        .produtos-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title h2 {
+            font-size: 1.3rem;
+            color: #333;
+        }
+
+        /* Busca e Filtros */
+        .search-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2e7d32;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .category-filters {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            border-color: #2e7d32;
+        }
+
+        .filter-btn.active {
+            background: #2e7d32;
+            color: white;
+            border-color: #2e7d32;
+        }
+
+        /* Grid de Produtos */
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .produto-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-color: #2e7d32;
+        }
+
+        .produto-card.em-falta {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .produto-card .badge-falta {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #d32f2f;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .produto-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .produto-nome {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            line-height: 1.3;
+            height: 36px;
+            overflow: hidden;
+        }
+
+        .produto-preco {
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .produto-unidade {
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .add-cart-btn {
+            width: 100%;
+            padding: 8px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .add-cart-btn:hover {
+            background: #1b5e20;
+        }
+
+        .add-cart-btn.added {
+            background: #ff9800;
+        }
+
+        /* Carrinho Lateral */
+        .carrinho-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 90px;
+            max-height: calc(100vh - 110px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .carrinho-items {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .carrinho-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .carrinho-empty i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .cart-item-emoji {
+            font-size: 1.8rem;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-nome {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #333;
+        }
+
+        .cart-item-preco {
+            font-size: 0.8rem;
+            color: #2e7d32;
+        }
+
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .qty-btn:hover {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .qty-value {
+            font-weight: 600;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        .cart-item-remove {
+            color: #d32f2f;
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.3s;
+        }
+
+        .cart-item-remove:hover {
+            transform: scale(1.2);
+        }
+
+        /* Total e Checkout */
+        .carrinho-footer {
+            border-top: 2px solid #f0f0f0;
+            padding-top: 15px;
+        }
+
+        .carrinho-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .total-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .total-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+        }
+
+        .checkout-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Modal de Checkout */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2e7d32;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .order-summary {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .order-summary h4 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .order-summary-items {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            padding-top: 10px;
+            color: #2e7d32;
+            font-size: 1.1rem;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .payment-option {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .payment-option:hover {
+            border-color: #2e7d32;
+        }
+
+        .payment-option.selected {
+            border-color: #2e7d32;
+            background: #e8f5e9;
+        }
+
+        .payment-option i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .payment-option span {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .submit-order-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .submit-order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Sucesso */
+        .success-modal {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+
+        .success-modal h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .success-modal p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .order-number {
+            background: #f0f0f0;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .carrinho-section {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-radius: 20px 20px 0 0;
+                max-height: 60vh;
+                transform: translateY(calc(100% - 80px));
+                transition: transform 0.3s;
+                z-index: 50;
+            }
+
+            .carrinho-section.expanded {
+                transform: translateY(0);
+            }
+
+            .carrinho-toggle {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #f0f0f0;
+                margin-bottom: 15px;
+                cursor: pointer;
+            }
+
+            .produtos-section {
+                padding-bottom: 100px;
+            }
+        }
+
+        @media (min-width: 901px) {
+            .carrinho-toggle {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.1rem;
+            }
+
+            .produtos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .category-filters {
+                display: none;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="voltar">
+                <i class="fas fa-arrow-left"></i>
+                Voltar
+            </a>
+            <h1>🛒 Compras Online</h1>
+            <div class="cart-icon" onclick="toggleCarrinho()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Container Principal -->
+    <div class="main-container">
+        <!-- Produtos -->
+        <section class="produtos-section">
+            <div class="section-title">
+                <i class="fas fa-store" style="color: #2e7d32;"></i>
+                <h2>Escolha seus Produtos</h2>
+            </div>
+
+            <!-- Busca e Filtros -->
+            <div class="search-filters">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="busca-produto" placeholder="Buscar produto...">
+                </div>
+                <div class="category-filters">
+                    <button class="filter-btn active" data-cat="todos">Todos</button>
+                    <button class="filter-btn" data-cat="verduras">🥬 Verduras</button>
+                    <button class="filter-btn" data-cat="legumes">🥕 Legumes</button>
+                    <button class="filter-btn" data-cat="frutas">🍎 Frutas</button>
+                </div>
+            </div>
+
+            <!-- Grid de Produtos -->
+            <div class="produtos-grid" id="produtos-grid">
+                <!-- Produtos serão carregados via JS -->
+            </div>
+        </section>
+
+        <!-- Carrinho -->
+        <aside class="carrinho-section" id="carrinho-section">
+            <div class="carrinho-toggle" onclick="toggleCarrinho()">
+                <span><i class="fas fa-shopping-cart"></i> Meu Carrinho</span>
+                <span id="toggle-total">R$ 0,00</span>
+            </div>
+
+            <div class="section-title">
+                <i class="fas fa-shopping-basket" style="color: #2e7d32;"></i>
+                <h2>Meu Carrinho</h2>
+            </div>
+
+            <div class="carrinho-items" id="carrinho-items">
+                <div class="carrinho-empty">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Seu carrinho está vazio</p>
+                    <small>Adicione produtos para começar</small>
+                </div>
+            </div>
+
+            <div class="carrinho-footer">
+                <div class="carrinho-total">
+                    <span class="total-label">Total:</span>
+                    <span class="total-value" id="total-value">R$ 0,00</span>
+                </div>
+                <button class="checkout-btn" id="checkout-btn" onclick="abrirCheckout()" disabled>
+                    <i class="fas fa-credit-card"></i>
+                    Finalizar Pedido
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal de Checkout -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-clipboard-list"></i> Finalizar Pedido</h3>
+                <button class="modal-close" onclick="fecharCheckout()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="checkout-form">
+                    <!-- Resumo do Pedido -->
+                    <div class="order-summary">
+                        <h4>📦 Resumo do Pedido</h4>
+                        <div class="order-summary-items" id="summary-items"></div>
+                        <div class="summary-total">
+                            <span>Total:</span>
+                            <span id="summary-total">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <!-- Dados Pessoais -->
+                    <h4 style="margin-bottom: 15px; color: #333;">👤 Seus Dados</h4>
+                    
+                    <div class="form-group">
+                        <label for="nome">Nome Completo *</label>
+                        <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telefone">WhatsApp *</label>
+                            <input type="tel" id="telefone" name="telefone" required placeholder="(17) 99999-9999">
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CPF (opcional)</label>
+                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00">
+                        </div>
+                    </div>
+
+                    <!-- Endereço -->
+                    <h4 style="margin: 20px 0 15px; color: #333;">📍 Endereço de Entrega</h4>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cep">CEP</label>
+                            <input type="text" id="cep" name="cep" placeholder="00000-000" onblur="buscarCEP()">
+                        </div>
+                        <div class="form-group">
+                            <label for="numero">Número *</label>
+                            <input type="text" id="numero" name="numero" required placeholder="Nº">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endereco">Rua/Avenida *</label>
+                        <input type="text" id="endereco" name="endereco" required placeholder="Nome da rua">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bairro">Bairro *</label>
+                            <input type="text" id="bairro" name="bairro" required placeholder="Seu bairro">
+                        </div>
+                        <div class="form-group">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" id="cidade" name="cidade" value="São José do Rio Preto" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="complemento">Complemento</label>
+                        <input type="text" id="complemento" name="complemento" placeholder="Apto, bloco, referência...">
+                    </div>
+
+                    <!-- Forma de Pagamento -->
+                    <h4 style="margin: 20px 0 15px; color: #333;">💳 Forma de Pagamento</h4>
+
+                    <div class="payment-options">
+                        <div class="payment-option selected" data-payment="pix" onclick="selecionarPagamento(this)">
+                            <i class="fas fa-qrcode" style="color: #00b894;"></i>
+                            <span>PIX</span>
+                        </div>
+                        <div class="payment-option" data-payment="dinheiro" onclick="selecionarPagamento(this)">
+                            <i class="fas fa-money-bill-wave" style="color: #00cec9;"></i>
+                            <span>Dinheiro</span>
+                        </div>
+                        <div class="payment-option" data-payment="cartao" onclick="selecionarPagamento(this)">
+                            <i class="fas fa-credit-card" style="color: #6c5ce7;"></i>
+                            <span>Cartão</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="troco-container" style="display: none; margin-top: 15px;">
+                        <label for="troco">Troco para quanto?</label>
+                        <input type="text" id="troco" name="troco" placeholder="Ex: R$ 100,00">
+                    </div>
+
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label for="observacoes">Observações</label>
+                        <textarea id="observacoes" name="observacoes" placeholder="Alguma observação sobre o pedido ou entrega?"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-order-btn">
+                        <i class="fab fa-whatsapp"></i>
+                        Enviar Pedido via WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Sucesso -->
+    <div class="modal-overlay" id="success-modal">
+        <div class="modal">
+            <div class="success-modal">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Pedido Enviado com Sucesso!</h3>
+                <p>Seu pedido foi registrado e enviado para o WhatsApp do Varejão.</p>
+                <div class="order-number" id="order-number">#0001</div>
+                <p><strong>Aguarde a confirmação!</strong></p>
+                <button class="checkout-btn" onclick="fecharSucesso()">
+                    <i class="fas fa-home"></i>
+                    Voltar às Compras
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/produtos.js"></script>
+    <script>
+        // ====================================
+        // CARRINHO DE COMPRAS
+        // ====================================
+        
+        let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+        let categoriaAtual = 'todos';
+        let formaPagamento = 'pix';
+
+        // Emojis por categoria
+        const emojis = {
+            verduras: ['🥬', '🥦', '🌿', '🥗'],
+            legumes: ['🥕', '🥔', '🧅', '🧄', '🌽', '🍆'],
+            frutas: ['🍎', '🍊', '🍋', '🍇', '🍌', '🍓', '🥝', '🍑', '🍐', '🍉']
+        };
+
+        function getEmoji(categoria, index) {
+            const cat = emojis[categoria] || emojis.frutas;
+            return cat[index % cat.length];
+        }
+
+        // Renderizar produtos
+        function renderizarProdutosLoja() {
+            const grid = document.getElementById('produtos-grid');
+            const busca = document.getElementById('busca-produto').value.toLowerCase();
+            
+            let html = '';
+            let index = 0;
+
+            for (const [categoria, dados] of Object.entries(PRODUTOS)) {
+                if (categoriaAtual !== 'todos' && categoriaAtual !== categoria) continue;
+
+                dados.itens.forEach(produto => {
+                    if (busca && !produto.nome.toLowerCase().includes(busca)) return;
+                    if (produto.emFalta) return; // Não mostrar produtos em falta
+
+                    const emoji = getEmoji(categoria, index);
+                    const noCarrinho = carrinho.find(p => p.nome === produto.nome);
+                    const btnClass = noCarrinho ? 'add-cart-btn added' : 'add-cart-btn';
+                    const btnText = noCarrinho ? `<i class="fas fa-check"></i> ${noCarrinho.qtd}x` : '<i class="fas fa-plus"></i> Adicionar';
+
+                    html += `
+                        <div class="produto-card" data-categoria="${categoria}">
+                            <div class="produto-emoji">${emoji}</div>
+                            <div class="produto-nome">${produto.nome}</div>
+                            <div class="produto-preco">
+                                R$ ${produto.preco.toFixed(2).replace('.', ',')}
+                                <span class="produto-unidade">/${produto.unidade}</span>
+                            </div>
+                            <button class="${btnClass}" onclick="adicionarAoCarrinho('${produto.nome}', ${produto.preco}, '${produto.unidade}', '${categoria}')">
+                                ${btnText}
+                            </button>
+                        </div>
+                    `;
+                    index++;
+                });
+            }
+
+            if (!html) {
+                html = '<p style="text-align: center; color: #999; padding: 40px;">Nenhum produto encontrado</p>';
+            }
+
+            grid.innerHTML = html;
+        }
+
+        // Adicionar ao carrinho
+        function adicionarAoCarrinho(nome, preco, unidade, categoria) {
+            const existente = carrinho.find(p => p.nome === nome);
+            
+            if (existente) {
+                existente.qtd++;
+            } else {
+                carrinho.push({ nome, preco, unidade, categoria, qtd: 1 });
+            }
+            
+            salvarCarrinho();
+            atualizarCarrinho();
+            renderizarProdutosLoja();
+        }
+
+        // Remover do carrinho
+        function removerDoCarrinho(nome) {
+            carrinho = carrinho.filter(p => p.nome !== nome);
+            salvarCarrinho();
+            atualizarCarrinho();
+            renderizarProdutosLoja();
+        }
+
+        // Alterar quantidade
+        function alterarQuantidade(nome, delta) {
+            const item = carrinho.find(p => p.nome === nome);
+            if (item) {
+                item.qtd += delta;
+                if (item.qtd <= 0) {
+                    removerDoCarrinho(nome);
+                    return;
+                }
+            }
+            salvarCarrinho();
+            atualizarCarrinho();
+            renderizarProdutosLoja();
+        }
+
+        // Salvar carrinho
+        function salvarCarrinho() {
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+        }
+
+        // Atualizar visualização do carrinho
+        function atualizarCarrinho() {
+            const container = document.getElementById('carrinho-items');
+            const countEl = document.getElementById('cart-count');
+            const totalEl = document.getElementById('total-value');
+            const toggleTotalEl = document.getElementById('toggle-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            const total = carrinho.reduce((sum, item) => sum + (item.preco * item.qtd), 0);
+            const count = carrinho.reduce((sum, item) => sum + item.qtd, 0);
+            
+            countEl.textContent = count;
+            totalEl.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            toggleTotalEl.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            checkoutBtn.disabled = carrinho.length === 0;
+
+            if (carrinho.length === 0) {
+                container.innerHTML = `
+                    <div class="carrinho-empty">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Seu carrinho está vazio</p>
+                        <small>Adicione produtos para começar</small>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            carrinho.forEach(item => {
+                const emoji = getEmoji(item.categoria, 0);
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-emoji">${emoji}</div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-nome">${item.nome}</div>
+                            <div class="cart-item-preco">R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')} (${item.preco.toFixed(2).replace('.', ',')}/${item.unidade})</div>
+                        </div>
+                        <div class="cart-item-qty">
+                            <button class="qty-btn" onclick="alterarQuantidade('${item.nome}', -1)">-</button>
+                            <span class="qty-value">${item.qtd}</span>
+                            <button class="qty-btn" onclick="alterarQuantidade('${item.nome}', 1)">+</button>
+                        </div>
+                        <div class="cart-item-remove" onclick="removerDoCarrinho('${item.nome}')">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Toggle carrinho mobile
+        function toggleCarrinho() {
+            document.getElementById('carrinho-section').classList.toggle('expanded');
+        }
+
+        // Filtros de categoria
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                categoriaAtual = this.dataset.cat;
+                renderizarProdutosLoja();
+            });
+        });
+
+        // Busca
+        document.getElementById('busca-produto').addEventListener('input', renderizarProdutosLoja);
+
+        // ====================================
+        // CHECKOUT
+        // ====================================
+
+        function abrirCheckout() {
+            if (carrinho.length === 0) return;
+            
+            // Preencher resumo
+            const summaryItems = document.getElementById('summary-items');
+            const summaryTotal = document.getElementById('summary-total');
+            const total = carrinho.reduce((sum, item) => sum + (item.preco * item.qtd), 0);
+            
+            let html = '';
+            carrinho.forEach(item => {
+                html += `
+                    <div class="summary-item">
+                        <span>${item.qtd}x ${item.nome}</span>
+                        <span>R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}</span>
+                    </div>
+                `;
+            });
+            
+            summaryItems.innerHTML = html;
+            summaryTotal.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            
+            document.getElementById('checkout-modal').classList.add('active');
+        }
+
+        function fecharCheckout() {
+            document.getElementById('checkout-modal').classList.remove('active');
+        }
+
+        function selecionarPagamento(el) {
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            formaPagamento = el.dataset.payment;
+            
+            // Mostrar campo de troco se dinheiro
+            document.getElementById('troco-container').style.display = formaPagamento === 'dinheiro' ? 'block' : 'none';
+        }
+
+        // Buscar CEP
+        async function buscarCEP() {
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            if (cep.length !== 8) return;
+            
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data = await response.json();
+                
+                if (!data.erro) {
+                    document.getElementById('endereco').value = data.logradouro;
+                    document.getElementById('bairro').value = data.bairro;
+                    document.getElementById('cidade').value = data.localidade;
+                }
+            } catch (error) {
+                console.log('Erro ao buscar CEP');
+            }
+        }
+
+        // Máscaras
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, '');
+            v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
+            v = v.replace(/(\d{5})(\d)/, '$1-$2');
+            e.target.value = v.substring(0, 15);
+        });
+
+        document.getElementById('cep').addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, '');
+            v = v.replace(/^(\d{5})(\d)/, '$1-$2');
+            e.target.value = v.substring(0, 9);
+        });
+
+        document.getElementById('cpf').addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, '');
+            v = v.replace(/(\d{3})(\d)/, '$1.$2');
+            v = v.replace(/(\d{3})(\d)/, '$1.$2');
+            v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            e.target.value = v.substring(0, 14);
+        });
+
+        // Submit do formulário
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const dados = Object.fromEntries(formData.entries());
+            
+            // Gerar número do pedido
+            const pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+            const numeroPedido = String(pedidos.length + 1).padStart(4, '0');
+            
+            // Criar objeto do pedido
+            const pedido = {
+                numero: numeroPedido,
+                data: new Date().toLocaleString('pt-BR'),
+                cliente: {
+                    nome: dados.nome,
+                    telefone: dados.telefone,
+                    cpf: dados.cpf || ''
+                },
+                endereco: {
+                    cep: dados.cep,
+                    rua: dados.endereco,
+                    numero: dados.numero,
+                    bairro: dados.bairro,
+                    cidade: dados.cidade,
+                    complemento: dados.complemento || ''
+                },
+                itens: [...carrinho],
+                total: carrinho.reduce((sum, item) => sum + (item.preco * item.qtd), 0),
+                pagamento: formaPagamento,
+                troco: dados.troco || '',
+                observacoes: dados.observacoes || '',
+                status: 'pendente'
+            };
+
+            // Salvar pedido no localStorage (para o admin ver)
+            pedidos.push(pedido);
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+
+            // Montar mensagem do WhatsApp
+            let mensagem = `🛒 *NOVO PEDIDO #${numeroPedido}*\n\n`;
+            mensagem += `👤 *Cliente:* ${dados.nome}\n`;
+            mensagem += `📱 *WhatsApp:* ${dados.telefone}\n`;
+            if (dados.cpf) mensagem += `📄 *CPF:* ${dados.cpf}\n`;
+            mensagem += `\n📍 *Endereço de Entrega:*\n`;
+            mensagem += `${dados.endereco}, ${dados.numero}\n`;
+            mensagem += `${dados.bairro} - ${dados.cidade}\n`;
+            if (dados.cep) mensagem += `CEP: ${dados.cep}\n`;
+            if (dados.complemento) mensagem += `Complemento: ${dados.complemento}\n`;
+            mensagem += `\n📦 *Itens do Pedido:*\n`;
+            
+            carrinho.forEach(item => {
+                mensagem += `• ${item.qtd}x ${item.nome} - R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}\n`;
+            });
+            
+            mensagem += `\n💰 *TOTAL: R$ ${pedido.total.toFixed(2).replace('.', ',')}*\n`;
+            mensagem += `\n💳 *Pagamento:* ${formaPagamento.toUpperCase()}`;
+            if (formaPagamento === 'dinheiro' && dados.troco) {
+                mensagem += ` (Troco para ${dados.troco})`;
+            }
+            
+            if (dados.observacoes) {
+                mensagem += `\n\n📝 *Observações:* ${dados.observacoes}`;
+            }
+
+            // Abrir WhatsApp
+            const whatsappUrl = `https://wa.me/5517991447419?text=${encodeURIComponent(mensagem)}`;
+            window.open(whatsappUrl, '_blank');
+
+            // Mostrar modal de sucesso
+            document.getElementById('order-number').textContent = `#${numeroPedido}`;
+            document.getElementById('checkout-modal').classList.remove('active');
+            document.getElementById('success-modal').classList.add('active');
+
+            // Limpar carrinho
+            carrinho = [];
+            salvarCarrinho();
+            atualizarCarrinho();
+            renderizarProdutosLoja();
+        });
+
+        function fecharSucesso() {
+            document.getElementById('success-modal').classList.remove('active');
+        }
+
+        // ====================================
+        // INICIALIZAÇÃO
+        // ====================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            renderizarProdutosLoja();
+            atualizarCarrinho();
+        });
+    </script>
+</body>
+</html>

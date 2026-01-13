@@ -97,6 +97,106 @@
             outline: none;
             border-color: var(--primary);
         }
+
+        /* Badge de Pedidos */
+        .badge-pedidos {
+            background: var(--danger);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            margin-left: 5px;
+        }
+        .badge-pedidos:empty {
+            display: none;
+        }
+        
+        /* Status dos Pedidos */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-pendente { background: #FFF3E0; color: #E65100; }
+        .status-confirmado { background: #E3F2FD; color: #1565C0; }
+        .status-entregue { background: #E8F5E9; color: #2E7D32; }
+        .status-cancelado { background: #FFEBEE; color: #C62828; }
+        
+        /* Pedido Card */
+        .pedido-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--secondary);
+        }
+        .pedido-card.confirmado { border-left-color: #1565C0; }
+        .pedido-card.entregue { border-left-color: #2E7D32; }
+        .pedido-card.cancelado { border-left-color: #C62828; }
+        
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .pedido-numero {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .pedido-data {
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+        .pedido-cliente {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .pedido-cliente-info, .pedido-endereco {
+            flex: 1;
+            min-width: 200px;
+        }
+        .pedido-cliente-info h4, .pedido-endereco h4 {
+            color: var(--gray-600);
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        .pedido-itens {
+            background: var(--gray-100);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .pedido-itens h4 {
+            margin-bottom: 10px;
+            color: var(--gray-800);
+        }
+        .pedido-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dashed var(--gray-200);
+        }
+        .pedido-item:last-child { border-bottom: none; }
+        .pedido-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: right;
+        }
+        .pedido-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
         
         .btn {
             display: inline-flex;
@@ -611,6 +711,7 @@
             <aside class="admin-sidebar">
                 <ul class="sidebar-menu">
                     <li><a href="#dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="#pedidos" onclick="showSection('pedidos')"><i class="fas fa-shopping-cart"></i> Pedidos <span id="pedidos-badge" class="badge-pedidos"></span></a></li>
                     <li><a href="#ofertas" onclick="showSection('ofertas')"><i class="fas fa-tags"></i> Ofertas</a></li>
                     <li><a href="#produtos" onclick="showSection('produtos')"><i class="fas fa-shopping-basket"></i> Produtos</a></li>
                     <li><a href="#fotos" onclick="showSection('fotos')"><i class="fas fa-images"></i> Fotos</a></li>
@@ -669,6 +770,45 @@
                         <a href="index.html" target="_blank" class="btn btn-success">
                             <i class="fas fa-external-link-alt"></i> Abrir Site
                         </a>
+                        <a href="loja.html" target="_blank" class="btn btn-secondary" style="margin-left: 10px;">
+                            <i class="fas fa-shopping-cart"></i> Loja Online
+                        </a>
+                    </div>
+                </section>
+                
+                <!-- Pedidos -->
+                <section id="pedidos" class="content-section">
+                    <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Pedidos Online</h2>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-bell"></i>
+                        <div>
+                            <strong>Novos pedidos:</strong> Os pedidos feitos na loja online aparecem aqui automaticamente!
+                        </div>
+                    </div>
+                    
+                    <!-- Filtros -->
+                    <div class="card" style="padding: 15px;">
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                            <strong>Filtrar:</strong>
+                            <button class="btn btn-sm" onclick="filtrarPedidos('todos')" id="filtro-todos" style="background: var(--primary); color: white;">Todos</button>
+                            <button class="btn btn-sm" onclick="filtrarPedidos('pendente')" id="filtro-pendente" style="background: var(--gray-200);">Pendentes</button>
+                            <button class="btn btn-sm" onclick="filtrarPedidos('confirmado')" id="filtro-confirmado" style="background: var(--gray-200);">Confirmados</button>
+                            <button class="btn btn-sm" onclick="filtrarPedidos('entregue')" id="filtro-entregue" style="background: var(--gray-200);">Entregues</button>
+                            <button class="btn btn-sm" onclick="filtrarPedidos('cancelado')" id="filtro-cancelado" style="background: var(--gray-200);">Cancelados</button>
+                            <button class="btn btn-sm btn-danger" onclick="limparPedidos()" style="margin-left: auto;">
+                                <i class="fas fa-trash"></i> Limpar Todos
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Lista de Pedidos -->
+                    <div id="lista-pedidos">
+                        <div class="card" style="text-align: center; padding: 40px;">
+                            <div style="font-size: 4rem; opacity: 0.3;">📦</div>
+                            <h3 style="color: var(--gray-600);">Nenhum pedido ainda</h3>
+                            <p style="color: var(--gray-600);">Quando os clientes fizerem pedidos na loja, eles aparecerão aqui.</p>
+                        </div>
                     </div>
                 </section>
                 
@@ -1557,7 +1697,175 @@
             });
         }
         
+        // ====================================
+        // GERENCIAMENTO DE PEDIDOS
+        // ====================================
+        
+        let filtroAtual = 'todos';
+        
+        function carregarPedidos() {
+            const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+            const container = document.getElementById('lista-pedidos');
+            const badge = document.getElementById('pedidos-badge');
+            
+            // Contar pendentes
+            const pendentes = pedidos.filter(p => p.status === 'pendente').length;
+            badge.textContent = pendentes > 0 ? pendentes : '';
+            
+            // Atualizar contador no dashboard
+            const totalPedidosEl = document.getElementById('totalPedidos');
+            if (totalPedidosEl) totalPedidosEl.textContent = pedidos.length;
+            
+            // Filtrar pedidos
+            let pedidosFiltrados = pedidos;
+            if (filtroAtual !== 'todos') {
+                pedidosFiltrados = pedidos.filter(p => p.status === filtroAtual);
+            }
+            
+            if (pedidosFiltrados.length === 0) {
+                container.innerHTML = `
+                    <div class="card" style="text-align: center; padding: 40px;">
+                        <div style="font-size: 4rem; opacity: 0.3;">📦</div>
+                        <h3 style="color: var(--gray-600);">Nenhum pedido ${filtroAtual !== 'todos' ? filtroAtual : ''}</h3>
+                        <p style="color: var(--gray-600);">Quando os clientes fizerem pedidos na loja, eles aparecerão aqui.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Ordenar por data (mais recentes primeiro)
+            pedidosFiltrados.sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            let html = '';
+            pedidosFiltrados.forEach((pedido, index) => {
+                const statusClass = pedido.status || 'pendente';
+                html += `
+                    <div class="pedido-card ${statusClass}">
+                        <div class="pedido-header">
+                            <div>
+                                <span class="pedido-numero">Pedido #${pedido.numero}</span>
+                                <span class="status-badge status-${statusClass}">${statusClass.toUpperCase()}</span>
+                            </div>
+                            <span class="pedido-data"><i class="fas fa-clock"></i> ${pedido.data}</span>
+                        </div>
+                        
+                        <div class="pedido-cliente">
+                            <div class="pedido-cliente-info">
+                                <h4>👤 CLIENTE</h4>
+                                <strong>${pedido.cliente.nome}</strong><br>
+                                <a href="https://wa.me/${pedido.cliente.telefone.replace(/\D/g, '')}" target="_blank" style="color: #25d366;">
+                                    <i class="fab fa-whatsapp"></i> ${pedido.cliente.telefone}
+                                </a>
+                                ${pedido.cliente.cpf ? `<br><small>CPF: ${pedido.cliente.cpf}</small>` : ''}
+                            </div>
+                            <div class="pedido-endereco">
+                                <h4>📍 ENDEREÇO</h4>
+                                ${pedido.endereco.rua}, ${pedido.endereco.numero}<br>
+                                ${pedido.endereco.bairro} - ${pedido.endereco.cidade}<br>
+                                ${pedido.endereco.cep ? `CEP: ${pedido.endereco.cep}<br>` : ''}
+                                ${pedido.endereco.complemento ? `<small>${pedido.endereco.complemento}</small>` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="pedido-itens">
+                            <h4>📦 Itens do Pedido</h4>
+                            ${pedido.itens.map(item => `
+                                <div class="pedido-item">
+                                    <span>${item.qtd}x ${item.nome}</span>
+                                    <span>R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <strong>💳 Pagamento:</strong> ${pedido.pagamento.toUpperCase()}
+                                ${pedido.troco ? ` (Troco: ${pedido.troco})` : ''}
+                                ${pedido.observacoes ? `<br><small>📝 ${pedido.observacoes}</small>` : ''}
+                            </div>
+                            <div class="pedido-total">Total: R$ ${pedido.total.toFixed(2).replace('.', ',')}</div>
+                        </div>
+                        
+                        <div class="pedido-actions">
+                            ${pedido.status === 'pendente' ? `
+                                <button class="btn btn-sm btn-success" onclick="atualizarStatusPedido('${pedido.numero}', 'confirmado')">
+                                    <i class="fas fa-check"></i> Confirmar
+                                </button>
+                            ` : ''}
+                            ${pedido.status === 'confirmado' ? `
+                                <button class="btn btn-sm btn-primary" onclick="atualizarStatusPedido('${pedido.numero}', 'entregue')">
+                                    <i class="fas fa-truck"></i> Marcar Entregue
+                                </button>
+                            ` : ''}
+                            ${pedido.status !== 'cancelado' && pedido.status !== 'entregue' ? `
+                                <button class="btn btn-sm btn-danger" onclick="atualizarStatusPedido('${pedido.numero}', 'cancelado')">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-sm" style="background: #25d366; color: white;" onclick="enviarWhatsApp('${pedido.cliente.telefone}', '${pedido.numero}')">
+                                <i class="fab fa-whatsapp"></i> Contatar
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="excluirPedido('${pedido.numero}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function atualizarStatusPedido(numero, novoStatus) {
+            const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+            const pedido = pedidos.find(p => p.numero === numero);
+            if (pedido) {
+                pedido.status = novoStatus;
+                localStorage.setItem('pedidos', JSON.stringify(pedidos));
+                carregarPedidos();
+            }
+        }
+        
+        function excluirPedido(numero) {
+            if (!confirm('Deseja excluir este pedido?')) return;
+            let pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+            pedidos = pedidos.filter(p => p.numero !== numero);
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+            carregarPedidos();
+        }
+        
+        function limparPedidos() {
+            if (!confirm('Deseja excluir TODOS os pedidos? Esta ação não pode ser desfeita.')) return;
+            localStorage.setItem('pedidos', JSON.stringify([]));
+            carregarPedidos();
+        }
+        
+        function filtrarPedidos(filtro) {
+            filtroAtual = filtro;
+            // Atualizar visual dos botões
+            document.querySelectorAll('[id^="filtro-"]').forEach(btn => {
+                btn.style.background = 'var(--gray-200)';
+                btn.style.color = 'var(--gray-800)';
+            });
+            const btnAtivo = document.getElementById('filtro-' + filtro);
+            if (btnAtivo) {
+                btnAtivo.style.background = 'var(--primary)';
+                btnAtivo.style.color = 'white';
+            }
+            carregarPedidos();
+        }
+        
+        function enviarWhatsApp(telefone, numeroPedido) {
+            const msg = `Olá! Sobre o pedido #${numeroPedido} do Varejão Santa Catarina...`;
+            const url = `https://wa.me/${telefone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        }
+        
+        // Carregar pedidos ao iniciar
+        setInterval(carregarPedidos, 5000); // Atualiza a cada 5 segundos
+        
         carregarDadosSalvos();
+        carregarPedidos();
     </script>
 </body>
 </html>
