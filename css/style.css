@@ -610,6 +610,7 @@ input, textarea, select {
 .hero-badge {
     display: inline-block;
     background: rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     padding: var(--spacing-sm) var(--spacing-lg);
     border-radius: var(--radius-full);
@@ -1307,6 +1308,7 @@ input, textarea, select {
 
 .diferencial-card {
     background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     padding: var(--spacing-xl);
     border-radius: var(--radius-xl);
@@ -2119,11 +2121,186 @@ input, textarea, select {
     }
     
     .hero {
-        min-height: auto;
+        min-height: 50vh;
         padding: 2rem 0;
     }
     
     .section {
         padding: 2rem 0;
     }
+}
+
+/* ============================================
+   UTILITY CLASSES (evitar inline styles)
+============================================ */
+
+/* Navegação */
+.nav-link-destaque {
+    color: #ff9800;
+    font-weight: 600;
+}
+
+.hidden {
+    display: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--gray-600);
+}
+
+.mt-10 { margin-top: 10px; }
+.mt-15 { margin-top: 15px; }
+.mt-20 { margin-top: 20px; }
+.mt-40 { margin-top: 40px; }
+.mb-10 { margin-bottom: 10px; }
+.mb-15 { margin-bottom: 15px; }
+.mb-20 { margin-bottom: 20px; }
+.ml-10 { margin-left: 10px; }
+.ml-20 { margin-left: 20px; }
+.ml-auto { margin-left: auto; }
+.m-0 { margin: 0; }
+
+.p-15 { padding: 15px; }
+.p-30 { padding: 30px; }
+.p-40 { padding: 40px; }
+.pt-30 { padding-top: 30px; }
+
+.border-top-separator {
+    border-top: 2px solid var(--gray-200);
+}
+
+/* Ícones grandes */
+.icon-large {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.icon-xl {
+    font-size: 3rem;
+}
+
+.icon-xxl {
+    font-size: 4rem;
+    opacity: 0.3;
+}
+
+/* Flexbox utilities */
+.flex-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Botões admin */
+.btn-filter-active {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-filter-inactive {
+    background: var(--gray-200);
+}
+
+.btn-logout {
+    background: rgba(255,255,255,0.2);
+}
+
+/* Grid de produtos admin */
+.grid-produtos-admin {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Lista com margem */
+.list-styled {
+    margin: 10px 0 0 20px;
+}
+
+.list-styled-alt {
+    margin-left: 20px;
+}
+
+/* Input oculto */
+.input-hidden {
+    display: none;
+}
+
+/* Iframe map */
+.map-iframe {
+    border: 0;
+}
+
+/* Toggle container */
+.toggle-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.toggle-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background: var(--gray-100);
+    border-radius: 10px;
+}
+
+/* Alert font size small */
+.alert-sm {
+    font-size: 0.85rem;
+}
+
+/* Help section styles */
+.help-section {
+    margin-bottom: 20px;
+}
+
+.help-title {
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.help-list {
+    margin-left: 20px;
+    color: var(--gray-600);
+}
+
+/* Flex align gap */
+.flex-align-gap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Icon colors */
+.icon-store { color: #2e7d32; }
+.icon-pix { color: #00b894; }
+.icon-cash { color: #00cec9; }
+.icon-card { color: #6c5ce7; }
+
+/* Form section title */
+.form-section-title {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.form-section-title-spaced {
+    margin: 20px 0 15px;
+    color: #333;
 }

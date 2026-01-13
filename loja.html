@@ -801,7 +801,7 @@
         <!-- Produtos -->
         <section class="produtos-section">
             <div class="section-title">
-                <i class="fas fa-store" style="color: #2e7d32;"></i>
+                <i class="fas fa-store icon-store"></i>
                 <h2>Escolha seus Produtos</h2>
             </div>
 
@@ -833,7 +833,7 @@
             </div>
 
             <div class="section-title">
-                <i class="fas fa-shopping-basket" style="color: #2e7d32;"></i>
+                <i class="fas fa-shopping-basket icon-store"></i>
                 <h2>Meu Carrinho</h2>
             </div>
 
@@ -878,7 +878,7 @@
                     </div>
 
                     <!-- Dados Pessoais -->
-                    <h4 style="margin-bottom: 15px; color: #333;">👤 Seus Dados</h4>
+                    <h4 class="form-section-title">👤 Seus Dados</h4>
                     
                     <div class="form-group">
                         <label for="nome">Nome Completo *</label>
@@ -897,7 +897,7 @@
                     </div>
 
                     <!-- Endereço -->
-                    <h4 style="margin: 20px 0 15px; color: #333;">📍 Endereço de Entrega</h4>
+                    <h4 class="form-section-title-spaced">📍 Endereço de Entrega</h4>
 
                     <div class="form-row">
                         <div class="form-group">
@@ -932,29 +932,29 @@
                     </div>
 
                     <!-- Forma de Pagamento -->
-                    <h4 style="margin: 20px 0 15px; color: #333;">💳 Forma de Pagamento</h4>
+                    <h4 class="form-section-title-spaced">💳 Forma de Pagamento</h4>
 
                     <div class="payment-options">
                         <div class="payment-option selected" data-payment="pix" onclick="selecionarPagamento(this)">
-                            <i class="fas fa-qrcode" style="color: #00b894;"></i>
+                            <i class="fas fa-qrcode icon-pix"></i>
                             <span>PIX</span>
                         </div>
                         <div class="payment-option" data-payment="dinheiro" onclick="selecionarPagamento(this)">
-                            <i class="fas fa-money-bill-wave" style="color: #00cec9;"></i>
+                            <i class="fas fa-money-bill-wave icon-cash"></i>
                             <span>Dinheiro</span>
                         </div>
                         <div class="payment-option" data-payment="cartao" onclick="selecionarPagamento(this)">
-                            <i class="fas fa-credit-card" style="color: #6c5ce7;"></i>
+                            <i class="fas fa-credit-card icon-card"></i>
                             <span>Cartão</span>
                         </div>
                     </div>
 
-                    <div class="form-group" id="troco-container" style="display: none; margin-top: 15px;">
+                    <div class="form-group hidden mt-15" id="troco-container">
                         <label for="troco">Troco para quanto?</label>
                         <input type="text" id="troco" name="troco" placeholder="Ex: R$ 100,00">
                     </div>
 
-                    <div class="form-group" style="margin-top: 15px;">
+                    <div class="form-group mt-15">
                         <label for="observacoes">Observações</label>
                         <textarea id="observacoes" name="observacoes" placeholder="Alguma observação sobre o pedido ou entrega?"></textarea>
                     </div>
