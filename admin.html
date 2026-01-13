@@ -198,6 +198,67 @@
             margin-top: 15px;
         }
         
+        /* Cards de Produto para Admin */
+        .produto-admin-card {
+            background: var(--gray-100);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+        .produto-admin-img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #e8f5e9;
+        }
+        .produto-admin-emoji {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            background: #e8f5e9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .produto-admin-nome {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--gray-800);
+            margin-bottom: 8px;
+            height: 36px;
+            overflow: hidden;
+        }
+        .produto-admin-input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+        .produto-admin-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .produto-admin-btn {
+            width: 100%;
+            padding: 8px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .produto-admin-btn:hover {
+            background: var(--primary-dark);
+        }
+        
         .btn {
             display: inline-flex;
             align-items: center;
@@ -1015,6 +1076,40 @@
                     <button class="btn btn-success" style="margin-top: 20px;" onclick="salvarCategorias()">
                         <i class="fas fa-save"></i> Salvar Todas as Categorias
                     </button>
+                    
+                    <!-- Seção de Fotos dos Produtos da Loja -->
+                    <div style="margin-top: 40px; padding-top: 30px; border-top: 2px solid var(--gray-200);">
+                        <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Fotos dos Produtos (Loja Online)</h2>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-camera"></i>
+                            <div>
+                                <strong>Personalize a loja:</strong> Adicione fotos reais dos produtos para deixar a loja online mais profissional!
+                            </div>
+                        </div>
+                        
+                        <!-- Filtros de Categoria -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                            <button class="btn btn-sm" onclick="filtrarProdutosAdmin('todos')" id="btn-todos" style="background: var(--primary); color: white;">Todos</button>
+                            <button class="btn btn-sm" onclick="filtrarProdutosAdmin('verduras')" id="btn-verduras" style="background: var(--gray-200);">🥬 Verduras</button>
+                            <button class="btn btn-sm" onclick="filtrarProdutosAdmin('legumes')" id="btn-legumes" style="background: var(--gray-200);">🥕 Legumes</button>
+                            <button class="btn btn-sm" onclick="filtrarProdutosAdmin('frutas')" id="btn-frutas" style="background: var(--gray-200);">🍎 Frutas</button>
+                        </div>
+                        
+                        <!-- Busca -->
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <input type="text" id="busca-produto-admin" placeholder="🔍 Buscar produto..." onkeyup="buscarProdutoAdmin()">
+                        </div>
+                        
+                        <!-- Grid de Produtos para Editar -->
+                        <div id="grid-produtos-admin" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; max-height: 600px; overflow-y: auto;">
+                            <!-- Produtos serão carregados via JS -->
+                        </div>
+                        
+                        <button class="btn btn-success" style="margin-top: 20px;" onclick="salvarFotosProdutos()">
+                            <i class="fas fa-save"></i> Salvar Fotos dos Produtos
+                        </button>
+                    </div>
                 </section>
                 
                 <!-- Fotos -->
@@ -1866,6 +1961,126 @@
         
         carregarDadosSalvos();
         carregarPedidos();
+        
+        // ====================================
+        // GERENCIAMENTO DE FOTOS DOS PRODUTOS
+        // ====================================
+        
+        // Dados dos produtos (copiados do produtos.js)
+        const PRODUTOS_ADMIN = {
+            verduras: {
+                nome: "Verduras", emoji: "🥬",
+                itens: ["Acelga","Agrião","Alface","Alho Poró","Almeirão","Cheiro Verde","Coentro","Couve Escura","Couve Manteiga","Espinafre","Folha de Beterraba","Hortelã","Manjericão","Mostarda","Rabanete","Rúcula","Salsão","Salsinha"]
+            },
+            legumes: {
+                nome: "Legumes", emoji: "🥕",
+                itens: ["Abóbora Brasil","Abóbora Cabotiã","Abóbora Italiana","Abóbora Paulista","Aipim","Alho","Batata Doce","Batata Extra","Batata Pirulito","Batata Yacon","Berinjela","Beterraba","Brocolís","Cebola Extra","Cebola Miúda","Cebola Roxa","Cenoura Extra","Chuchu","Couve Flor","Gengibre","Inhame","Jiló","Mandioca","Milho","Pepino","Pimenta","Pimentão","Quiabo","Repolho","Vagem"]
+            },
+            frutas: {
+                nome: "Frutas", emoji: "🍎",
+                itens: ["Abacate","Abacaxi","Ameixa","Banana Maçã","Banana Nanica","Banana Prata","Caju","Cereja","Figo","Goiaba","Jabuticaba","Kiwi","Laranja","Lichia","Limão Cravo","Limão Siciliano","Limão Taiti","Maçã Argentina","Maçã Fuji","Maçã Verde","Mamão Formosa","Mamão Papaia","Manga","Maracujá","Melancia","Melão","Mexirica","Morango","Pêra","Pêssego","Pitaya","Romã","Tangerina","Tomate","Uva Itália","Uva Niágara"]
+            }
+        };
+        
+        let filtroCategoriaProduto = 'todos';
+        let fotosProdutosTemp = JSON.parse(localStorage.getItem('fotos_produtos') || '{}');
+        
+        function carregarProdutosAdmin() {
+            const grid = document.getElementById('grid-produtos-admin');
+            if (!grid) return;
+            
+            const busca = document.getElementById('busca-produto-admin')?.value?.toLowerCase() || '';
+            let html = '';
+            
+            for (const [categoria, dados] of Object.entries(PRODUTOS_ADMIN)) {
+                if (filtroCategoriaProduto !== 'todos' && filtroCategoriaProduto !== categoria) continue;
+                
+                dados.itens.forEach(nome => {
+                    if (busca && !nome.toLowerCase().includes(busca)) return;
+                    
+                    const chave = nome.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                    const fotoAtual = fotosProdutosTemp[chave] || '';
+                    
+                    const imgHtml = fotoAtual 
+                        ? `<img src="${fotoAtual}" class="produto-admin-img" alt="${nome}" onerror="this.outerHTML='<div class=\\'produto-admin-emoji\\'>${dados.emoji}</div>'">`
+                        : `<div class="produto-admin-emoji">${dados.emoji}</div>`;
+                    
+                    html += `
+                        <div class="produto-admin-card" data-categoria="${categoria}">
+                            <div id="preview-${chave}">${imgHtml}</div>
+                            <div class="produto-admin-nome">${nome}</div>
+                            <input type="text" class="produto-admin-input" 
+                                id="url-${chave}" 
+                                placeholder="Cole a URL da imagem" 
+                                value="${fotoAtual}"
+                                onchange="previewFotoProduto('${chave}', this.value, '${dados.emoji}')">
+                            <input type="file" accept="image/*" style="display:none;" id="file-${chave}" 
+                                onchange="uploadFotoProduto('${chave}', this, '${dados.emoji}')">
+                            <button class="produto-admin-btn" onclick="document.getElementById('file-${chave}').click()">
+                                <i class="fas fa-upload"></i> Enviar Foto
+                            </button>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (!html) {
+                html = '<p style="text-align: center; padding: 40px; color: var(--gray-600);">Nenhum produto encontrado</p>';
+            }
+            
+            grid.innerHTML = html;
+        }
+        
+        function previewFotoProduto(chave, url, emojiDefault) {
+            const preview = document.getElementById('preview-' + chave);
+            if (url) {
+                preview.innerHTML = `<img src="${url}" class="produto-admin-img" alt="Produto" onerror="this.outerHTML='<div class=\\'produto-admin-emoji\\'>${emojiDefault}</div>'">`;
+                fotosProdutosTemp[chave] = url;
+            } else {
+                preview.innerHTML = `<div class="produto-admin-emoji">${emojiDefault}</div>`;
+                delete fotosProdutosTemp[chave];
+            }
+        }
+        
+        function uploadFotoProduto(chave, input, emojiDefault) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const url = e.target.result;
+                document.getElementById('url-' + chave).value = url;
+                previewFotoProduto(chave, url, emojiDefault);
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function filtrarProdutosAdmin(categoria) {
+            filtroCategoriaProduto = categoria;
+            
+            // Atualizar visual dos botões
+            ['todos', 'verduras', 'legumes', 'frutas'].forEach(cat => {
+                const btn = document.getElementById('btn-' + cat);
+                if (btn) {
+                    btn.style.background = cat === categoria ? 'var(--primary)' : 'var(--gray-200)';
+                    btn.style.color = cat === categoria ? 'white' : 'var(--gray-800)';
+                }
+            });
+            
+            carregarProdutosAdmin();
+        }
+        
+        function buscarProdutoAdmin() {
+            carregarProdutosAdmin();
+        }
+        
+        function salvarFotosProdutos() {
+            localStorage.setItem('fotos_produtos', JSON.stringify(fotosProdutosTemp));
+            alert('Fotos dos produtos salvas com sucesso! As alterações já estão visíveis na loja online.');
+        }
+        
+        // Carregar produtos ao iniciar
+        setTimeout(carregarProdutosAdmin, 500);
     </script>
 </body>
 </html>

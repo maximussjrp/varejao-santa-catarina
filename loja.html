@@ -236,9 +236,26 @@
             font-weight: 700;
         }
 
+        .produto-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: #e8f5e9;
+        }
+
         .produto-emoji {
             font-size: 2.5rem;
             margin-bottom: 10px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8f5e9;
+            border-radius: 10px;
+            margin: 0 auto 10px;
         }
 
         .produto-nome {
@@ -993,6 +1010,19 @@
             return cat[index % cat.length];
         }
 
+        // Obter foto do produto do admin ou usar emoji como fallback
+        function getFotoProduto(nome, categoria, index) {
+            const fotosProdutos = JSON.parse(localStorage.getItem('fotos_produtos') || '{}');
+            const chave = nome.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            
+            if (fotosProdutos[chave]) {
+                return `<img src="${fotosProdutos[chave]}" alt="${nome}" class="produto-img" onerror="this.outerHTML='<div class=\\'produto-emoji\\'>${getEmoji(categoria, index)}</div>'">`;
+            }
+            
+            // Fallback para emoji
+            return `<div class="produto-emoji">${getEmoji(categoria, index)}</div>`;
+        }
+
         // Renderizar produtos
         function renderizarProdutosLoja() {
             const grid = document.getElementById('produtos-grid');
@@ -1008,14 +1038,14 @@
                     if (busca && !produto.nome.toLowerCase().includes(busca)) return;
                     if (produto.emFalta) return; // Não mostrar produtos em falta
 
-                    const emoji = getEmoji(categoria, index);
+                    const fotoProduto = getFotoProduto(produto.nome, categoria, index);
                     const noCarrinho = carrinho.find(p => p.nome === produto.nome);
                     const btnClass = noCarrinho ? 'add-cart-btn added' : 'add-cart-btn';
                     const btnText = noCarrinho ? `<i class="fas fa-check"></i> ${noCarrinho.qtd}x` : '<i class="fas fa-plus"></i> Adicionar';
 
                     html += `
                         <div class="produto-card" data-categoria="${categoria}">
-                            <div class="produto-emoji">${emoji}</div>
+                            ${fotoProduto}
                             <div class="produto-nome">${produto.nome}</div>
                             <div class="produto-preco">
                                 R$ ${produto.preco.toFixed(2).replace('.', ',')}
