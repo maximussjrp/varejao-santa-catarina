@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Varejão Santa Catarina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E7D32;
+            --primary-dark: #1B5E20;
+            --secondary: #FF9800;
+            --danger: #E53935;
+            --success: #4CAF50;
+            --gray-100: #F5F5F5;
+            --gray-200: #EEEEEE;
+            --gray-600: #757575;
+            --gray-800: #424242;
+            --white: #FFFFFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        }
+        
+        .login-box {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-logo {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+        
+        .login-title {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .login-subtitle {
+            color: var(--gray-600);
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--gray-800);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--white);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+        
+        .btn-block {
+            width: 100%;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+        
+        /* Admin Layout */
+        .admin-container {
+            display: none;
+        }
+        
+        .admin-container.active {
+            display: block;
+        }
+        
+        .admin-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .admin-header h1 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .admin-body {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .admin-sidebar {
+            width: 250px;
+            background: var(--white);
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 25px;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            background: var(--gray-100);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+        
+        .sidebar-menu li a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .admin-content {
+            flex: 1;
+            padding: 30px;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--gray-800);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        /* Ofertas Table */
+        .ofertas-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .ofertas-table th,
+        .ofertas-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .ofertas-table th {
+            background: var(--gray-100);
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .ofertas-table tr:hover {
+            background: var(--gray-100);
+        }
+        
+        .oferta-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+        
+        .badge-danger {
+            background: #FFEBEE;
+            color: var(--danger);
+        }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            color: var(--primary);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-600);
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* Categoria Card */
+        .categoria-card {
+            padding: 20px;
+        }
+        
+        .categoria-card h4 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .categoria-preview {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background: var(--gray-100);
+        }
+        
+        .categoria-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed var(--gray-200);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .image-upload:hover {
+            border-color: var(--primary);
+            background: var(--gray-100);
+        }
+        
+        .image-upload i {
+            font-size: 2rem;
+            color: var(--gray-400);
+            margin-bottom: 10px;
+        }
+        
+        .image-upload p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+        
+        .image-preview {
+            max-width: 200px;
+            margin: 10px auto;
+            border-radius: 10px;
+        }
+        
+        /* Alert */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-success {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+        
+        .alert-warning {
+            background: #FFF3E0;
+            color: var(--secondary);
+        }
+        
+        .alert-danger {
+            background: #FFEBEE;
+            color: var(--danger);
+        }
+        
+        .alert-info {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+        
+        /* Help Section */
+        .help-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .help-card h4 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .help-card p {
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .help-card a {
+            color: var(--secondary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                display: none;
+            }
+            
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .ofertas-table {
+                font-size: 0.85rem;
+            }
+        }
+        
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-200);
+            transition: 0.4s;
+            border-radius: 26px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--success);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <div class="login-logo">🥬</div>
+            <h2 class="login-title">Painel Administrativo</h2>
+            <p class="login-subtitle">Varejão Santa Catarina</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" id="username" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+            </form>
+            
+            <div class="alert alert-info" style="margin-top: 20px; font-size: 0.85rem;">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Primeiro acesso:</strong><br>
+                    Usuário: admin | Senha: varejao123
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Container -->
+    <div id="adminContainer" class="admin-container">
+        <header class="admin-header">
+            <h1><span>🥬</span> Painel Administrativo</h1>
+            <div class="user-info">
+                <span id="userName">Administrador</span>
+                <button class="btn btn-sm" onclick="logout()" style="background: rgba(255,255,255,0.2);">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </header>
+        
+        <div class="admin-body">
+            <aside class="admin-sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="#ofertas" onclick="showSection('ofertas')"><i class="fas fa-tags"></i> Ofertas</a></li>
+                    <li><a href="#produtos" onclick="showSection('produtos')"><i class="fas fa-shopping-basket"></i> Produtos</a></li>
+                    <li><a href="#fotos" onclick="showSection('fotos')"><i class="fas fa-images"></i> Fotos</a></li>
+                    <li><a href="#informacoes" onclick="showSection('informacoes')"><i class="fas fa-info-circle"></i> Informações</a></li>
+                    <li><a href="#horarios" onclick="showSection('horarios')"><i class="fas fa-clock"></i> Horários</a></li>
+                    <li><a href="#configuracoes" onclick="showSection('configuracoes')"><i class="fas fa-cog"></i> Configurações</a></li>
+                    <li><a href="#ajuda" onclick="showSection('ajuda')"><i class="fas fa-question-circle"></i> Ajuda</a></li>
+                </ul>
+            </aside>
+            
+            <main class="admin-content">
+                <!-- Dashboard -->
+                <section id="dashboard" class="content-section active">
+                    <h2 class="section-title"><i class="fas fa-home"></i> Bem-vindo ao Painel</h2>
+                    
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>Importante:</strong> Atualize as ofertas semanalmente para manter o site sempre atualizado!
+                        </div>
+                    </div>
+                    
+                    <div class="grid-3">
+                        <div class="card" style="text-align: center;">
+                            <div style="font-size: 3rem;">🏷️</div>
+                            <h3 id="totalOfertas">0</h3>
+                            <p style="color: var(--gray-600);">Ofertas Ativas</p>
+                        </div>
+                        <div class="card" style="text-align: center;">
+                            <div style="font-size: 3rem;">📦</div>
+                            <h3 id="totalCategorias">6</h3>
+                            <p style="color: var(--gray-600);">Categorias</p>
+                        </div>
+                        <div class="card" style="text-align: center;">
+                            <div style="font-size: 3rem;">⭐</div>
+                            <h3>4.7</h3>
+                            <p style="color: var(--gray-600);">Avaliação Google</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-rocket"></i> Ações Rápidas</h4>
+                        <div class="grid-2">
+                            <button class="btn btn-primary" onclick="showSection('ofertas')">
+                                <i class="fas fa-plus"></i> Adicionar Nova Oferta
+                            </button>
+                            <button class="btn btn-secondary" onclick="showSection('fotos')">
+                                <i class="fas fa-camera"></i> Enviar Novas Fotos
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-eye"></i> Visualizar Site</h4>
+                        <p style="margin-bottom: 15px; color: var(--gray-600);">Veja como está ficando seu site:</p>
+                        <a href="index.html" target="_blank" class="btn btn-success">
+                            <i class="fas fa-external-link-alt"></i> Abrir Site
+                        </a>
+                    </div>
+                </section>
+                
+                <!-- Ofertas -->
+                <section id="ofertas" class="content-section">
+                    <h2 class="section-title"><i class="fas fa-tags"></i> Gerenciar Ofertas</h2>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb"></i>
+                        <div>
+                            <strong>Dica:</strong> Atualize as ofertas toda semana para atrair mais clientes!
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h4 class="card-title" style="margin: 0;"><i class="fas fa-list"></i> Ofertas Cadastradas</h4>
+                            <button class="btn btn-primary" onclick="openOfertaModal()">
+                                <i class="fas fa-plus"></i> Nova Oferta
+                            </button>
+                        </div>
+                        
+                        <table class="ofertas-table">
+                            <thead>
+                                <tr>
+                                    <th>Foto</th>
+                                    <th>Produto</th>
+                                    <th>Preço Original</th>
+                                    <th>Preço Oferta</th>
+                                    <th>Desconto</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ofertasTable">
+                                <!-- Ofertas serão carregadas aqui -->
+                            </tbody>
+                        </table>
+                        
+                        <p id="noOfertas" style="text-align: center; padding: 30px; color: var(--gray-600);">
+                            <i class="fas fa-inbox" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                            Nenhuma oferta cadastrada ainda.
+                        </p>
+                    </div>
+                </section>
+                
+                <!-- Produtos/Categorias -->
+                <section id="produtos" class="content-section">
+                    <h2 class="section-title"><i class="fas fa-shopping-basket"></i> Categorias de Produtos</h2>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <strong>Personalize as categorias:</strong> Altere as imagens, títulos e descrições que aparecem no site.
+                        </div>
+                    </div>
+                    
+                    <div class="grid-2" id="categoriasGrid">
+                        <!-- Frutas -->
+                        <div class="card categoria-card">
+                            <div class="categoria-preview">
+                                <img id="imgFrutas" src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&h=250&fit=crop" alt="Frutas">
+                            </div>
+                            <h4>🍎 Frutas</h4>
+                            <div class="form-group">
+                                <label>URL da Imagem</label>
+                                <input type="text" id="urlFrutas" placeholder="Cole a URL da imagem" onchange="previewCategoriaImg('Frutas')">
+                            </div>
+                            <div class="form-group">
+                                <label>Ou envie do computador</label>
+                                <input type="file" accept="image/*" onchange="uploadCategoriaImg(this, 'Frutas')">
+                            </div>
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <input type="text" id="descFrutas" value="Maçã, banana, laranja, uva, melancia e muito mais!">
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade (ex: +50 variedades)</label>
+                                <input type="text" id="qtdFrutas" value="+50 variedades">
+                            </div>
+                        </div>
+                        
+                        <!-- Verduras -->
+                        <div class="card categoria-card">
+                            <div class="categoria-preview">
+                                <img id="imgVerduras" src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=250&fit=crop" alt="Verduras">
+                            </div>
+                            <h4>🥬 Verduras</h4>
+                            <div class="form-group">
+                                <label>URL da Imagem</label>
+                                <input type="text" id="urlVerduras" placeholder="Cole a URL da imagem" onchange="previewCategoriaImg('Verduras')">
+                            </div>
+                            <div class="form-group">
+                                <label>Ou envie do computador</label>
+                                <input type="file" accept="image/*" onchange="uploadCategoriaImg(this, 'Verduras')">
+                            </div>
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <input type="text" id="descVerduras" value="Alface, couve, rúcula, espinafre, agrião e mais!">
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input type="text" id="qtdVerduras" value="+40 variedades">
+                            </div>
+                        </div>
+                        
+                        <!-- Legumes -->
+                        <div class="card categoria-card">
+                            <div class="categoria-preview">
+                                <img id="imgLegumes" src="https://images.unsplash.com/photo-1597362925123-77861d3fbac7?w=400&h=250&fit=crop" alt="Legumes">
+                            </div>
+                            <h4>🥕 Legumes</h4>
+                            <div class="form-group">
+                                <label>URL da Imagem</label>
+                                <input type="text" id="urlLegumes" placeholder="Cole a URL da imagem" onchange="previewCategoriaImg('Legumes')">
+                            </div>
+                            <div class="form-group">
+                                <label>Ou envie do computador</label>
+                                <input type="file" accept="image/*" onchange="uploadCategoriaImg(this, 'Legumes')">
+                            </div>
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <input type="text" id="descLegumes" value="Cenoura, batata, tomate, cebola, pimentão e mais!">
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input type="text" id="qtdLegumes" value="+60 variedades">
+                            </div>
+                        </div>
+                        
+                        <!-- Temperos -->
+                        <div class="card categoria-card">
+                            <div class="categoria-preview">
+                                <img id="imgTemperos" src="https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=400&h=250&fit=crop" alt="Temperos">
+                            </div>
+                            <h4>🌿 Temperos e Ervas</h4>
+                            <div class="form-group">
+                                <label>URL da Imagem</label>
+                                <input type="text" id="urlTemperos" placeholder="Cole a URL da imagem" onchange="previewCategoriaImg('Temperos')">
+                            </div>
+                            <div class="form-group">
+                                <label>Ou envie do computador</label>
+                                <input type="file" accept="image/*" onchange="uploadCategoriaImg(this, 'Temperos')">
+                            </div>
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <input type="text" id="descTemperos" value="Manjericão, salsinha, cebolinha, alho e mais!">
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input type="text" id="qtdTemperos" value="+20 variedades">
+                            </div>
+                        </div>
+                        
+                        <!-- Ovos e Laticínios -->
+                        <div class="card categoria-card">
+                            <div class="categoria-preview">
+                                <img id="imgOvos" src="https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&h=250&fit=crop" alt="Ovos">
+                            </div>
+                            <h4>🥚 Ovos e Laticínios</h4>
+                            <div class="form-group">
+                                <label>URL da Imagem</label>
+                                <input type="text" id="urlOvos" placeholder="Cole a URL da imagem" onchange="previewCategoriaImg('Ovos')">
+                            </div>
+                            <div class="form-group">
+                                <label>Ou envie do computador</label>
+                                <input type="file" accept="image/*" onchange="uploadCategoriaImg(this, 'Ovos')">
+                            </div>
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <input type="text" id="descOvos" value="Ovos caipira, queijos, manteiga e muito mais!">
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input type="text" id="qtdOvos" value="+15 variedades">
+                            </div>
+                        </div>
+                        
+                        <!-- Mercearia -->
+                        <div class="card categoria-card">
+                            <div class="categoria-preview">
+                                <img id="imgMercearia" src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=250&fit=crop" alt="Mercearia">
+                            </div>
+                            <h4>🛒 Mercearia</h4>
+                            <div class="form-group">
+                                <label>URL da Imagem</label>
+                                <input type="text" id="urlMercearia" placeholder="Cole a URL da imagem" onchange="previewCategoriaImg('Mercearia')">
+                            </div>
+                            <div class="form-group">
+                                <label>Ou envie do computador</label>
+                                <input type="file" accept="image/*" onchange="uploadCategoriaImg(this, 'Mercearia')">
+                            </div>
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <input type="text" id="descMercearia" value="Grãos, cereais, conservas e produtos diversos!">
+                            </div>
+                            <div class="form-group">
+                                <label>Quantidade</label>
+                                <input type="text" id="qtdMercearia" value="+30 variedades">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-success" style="margin-top: 20px;" onclick="salvarCategorias()">
+                        <i class="fas fa-save"></i> Salvar Todas as Categorias
+                    </button>
+                </section>
+                
+                <!-- Fotos -->
+                <section id="fotos" class="content-section">
+                    <h2 class="section-title"><i class="fas fa-images"></i> Gerenciar Fotos</h2>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-camera"></i>
+                        <div>
+                            <strong>Dicas para boas fotos:</strong>
+                            <ul style="margin: 10px 0 0 20px;">
+                                <li>Use luz natural sempre que possível</li>
+                                <li>Fotografe os produtos de perto</li>
+                                <li>Mantenha o fundo limpo e organizado</li>
+                                <li>Fotos horizontais funcionam melhor</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-upload"></i> Enviar Novas Fotos</h4>
+                        
+                        <div class="image-upload" onclick="document.getElementById('fotoInput').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Clique aqui ou arraste fotos para enviar</p>
+                            <input type="file" id="fotoInput" accept="image/*" multiple style="display: none;">
+                        </div>
+                        
+                        <div id="fotoPreview" style="margin-top: 20px;"></div>
+                    </div>
+                    
+                    <div class="help-card">
+                        <h4><i class="fas fa-info-circle"></i> Onde usar as fotos?</h4>
+                        <p>As fotos enviadas podem ser usadas em:</p>
+                        <ul style="margin-left: 20px;">
+                            <li>Ofertas da semana</li>
+                            <li>Categorias de produtos</li>
+                            <li>Banner principal do site</li>
+                            <li>Galeria de fotos</li>
+                        </ul>
+                        <p style="margin-top: 15px;">
+                            <strong>Nota:</strong> As fotos são salvas no navegador. Para publicar no site definitivamente, 
+                            entre em contato com o desenvolvedor.
+                        </p>
+                    </div>
+                </section>
+                
+                <!-- Informações -->
+                <section id="informacoes" class="content-section">
+                    <h2 class="section-title"><i class="fas fa-info-circle"></i> Informações do Estabelecimento</h2>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-store"></i> Dados Básicos</h4>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Nome do Estabelecimento</label>
+                                <input type="text" id="infoNome" value="Varejão Santa Catarina">
+                            </div>
+                            <div class="form-group">
+                                <label>Slogan</label>
+                                <input type="text" id="infoSlogan" value="Frescor e Qualidade Todo Dia">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-phone"></i> Contato</h4>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Telefone</label>
+                                <input type="tel" id="infoTelefone" value="(17) 99144-7419">
+                            </div>
+                            <div class="form-group">
+                                <label>WhatsApp</label>
+                                <input type="tel" id="infoWhatsapp" value="(17) 99144-7419">
+                            </div>
+                            <div class="form-group">
+                                <label>Instagram (sem @)</label>
+                                <input type="text" id="infoInstagram" placeholder="varejao.santacatarina">
+                            </div>
+                            <div class="form-group">
+                                <label>Facebook</label>
+                                <input type="text" id="infoFacebook" placeholder="URL da página">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-map-marker-alt"></i> Endereço</h4>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Rua/Avenida e Número</label>
+                                <input type="text" id="infoRua" value="Av. Danilo Galeazzi, 2295">
+                            </div>
+                            <div class="form-group">
+                                <label>Bairro</label>
+                                <input type="text" id="infoBairro" value="Jardim Seyon">
+                            </div>
+                            <div class="form-group">
+                                <label>Cidade</label>
+                                <input type="text" id="infoCidade" value="São José do Rio Preto">
+                            </div>
+                            <div class="form-group">
+                                <label>CEP</label>
+                                <input type="text" id="infoCep" value="15051-000">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="salvarInformacoes()">
+                        <i class="fas fa-save"></i> Salvar Informações
+                    </button>
+                </section>
+                
+                <!-- Horários -->
+                <section id="horarios" class="content-section">
+                    <h2 class="section-title"><i class="fas fa-clock"></i> Horário de Funcionamento</h2>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-calendar-alt"></i> Defina seus horários</h4>
+                        
+                        <div class="form-group">
+                            <label>Segunda a Sexta</label>
+                            <input type="text" id="horarioSemana" placeholder="Ex: 7h às 19h">
+                        </div>
+                        <div class="form-group">
+                            <label>Sábado</label>
+                            <input type="text" id="horarioSabado" placeholder="Ex: 7h às 19h">
+                        </div>
+                        <div class="form-group">
+                            <label>Domingo</label>
+                            <input type="text" id="horarioDomingo" placeholder="Ex: 7h às 13h">
+                        </div>
+                        <div class="form-group">
+                            <label>Feriados (opcional)</label>
+                            <input type="text" id="horarioFeriado" placeholder="Ex: Consultar">
+                        </div>
+                        
+                        <button class="btn btn-success" onclick="salvarHorarios()">
+                            <i class="fas fa-save"></i> Salvar Horários
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- Configurações -->
+                <section id="configuracoes" class="content-section">
+                    <h2 class="section-title"><i class="fas fa-cog"></i> Configurações</h2>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-toggle-on"></i> Seções do Site</h4>
+                        <p style="margin-bottom: 20px; color: var(--gray-600);">Ative ou desative seções do seu site:</p>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: var(--gray-100); border-radius: 10px;">
+                                <span>Mostrar Ofertas da Semana</span>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="configOfertas" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                            </label>
+                            
+                            <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: var(--gray-100); border-radius: 10px;">
+                                <span>Mostrar Depoimentos</span>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="configDepoimentos">
+                                    <span class="toggle-slider"></span>
+                                </div>
+                            </label>
+                            
+                            <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: var(--gray-100); border-radius: 10px;">
+                                <span>Mostrar Estatísticas (Anos, Clientes, etc)</span>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="configEstatisticas">
+                                    <span class="toggle-slider"></span>
+                                </div>
+                            </label>
+                            
+                            <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: var(--gray-100); border-radius: 10px;">
+                                <span>Mostrar Newsletter</span>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="configNewsletter" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <button class="btn btn-success" style="margin-top: 20px;" onclick="salvarConfiguracoes()">
+                            <i class="fas fa-save"></i> Salvar Configurações
+                        </button>
+                    </div>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-key"></i> Alterar Senha</h4>
+                        <div class="form-group">
+                            <label>Nova Senha</label>
+                            <input type="password" id="novaSenha" placeholder="Digite a nova senha">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmar Nova Senha</label>
+                            <input type="password" id="confirmarSenha" placeholder="Confirme a nova senha">
+                        </div>
+                        <button class="btn btn-primary" onclick="alterarSenha()">
+                            <i class="fas fa-key"></i> Alterar Senha
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- Ajuda -->
+                <section id="ajuda" class="content-section">
+                    <h2 class="section-title"><i class="fas fa-question-circle"></i> Central de Ajuda</h2>
+                    
+                    <div class="card">
+                        <h4 class="card-title"><i class="fas fa-book"></i> Como usar o painel?</h4>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h5 style="color: var(--primary); margin-bottom: 10px;">📌 Adicionar Ofertas</h5>
+                            <ol style="margin-left: 20px; color: var(--gray-600);">
+                                <li>Vá em "Ofertas" no menu lateral</li>
+                                <li>Clique em "Nova Oferta"</li>
+                                <li>Preencha os dados do produto</li>
+                                <li>Adicione uma foto (opcional)</li>
+                                <li>Clique em "Salvar"</li>
+                            </ol>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h5 style="color: var(--primary); margin-bottom: 10px;">📸 Enviar Fotos</h5>
+                            <ol style="margin-left: 20px; color: var(--gray-600);">
+                                <li>Vá em "Fotos" no menu lateral</li>
+                                <li>Clique na área de upload</li>
+                                <li>Selecione as fotos do seu computador ou celular</li>
+                                <li>As fotos ficarão salvas para uso nas ofertas</li>
+                            </ol>
+                        </div>
+                        
+                        <div>
+                            <h5 style="color: var(--primary); margin-bottom: 10px;">⚙️ Alterar Informações</h5>
+                            <ol style="margin-left: 20px; color: var(--gray-600);">
+                                <li>Vá em "Informações" no menu lateral</li>
+                                <li>Edite os campos desejados</li>
+                                <li>Clique em "Salvar Informações"</li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <div class="help-card">
+                        <h4><i class="fas fa-headset"></i> Precisa de Ajuda?</h4>
+                        <p>Se tiver alguma dúvida ou problema, entre em contato com o desenvolvedor:</p>
+                        <p style="margin-top: 10px;">
+                            <i class="fab fa-whatsapp"></i> WhatsApp: <a href="#">(XX) XXXXX-XXXX</a><br>
+                            <i class="fas fa-envelope"></i> E-mail: <a href="#">desenvolvedor@email.com</a>
+                        </p>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Modal Oferta -->
+    <div id="ofertaModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-tags"></i> <span id="modalTitle">Nova Oferta</span></h3>
+                <button class="modal-close" onclick="closeOfertaModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="ofertaForm">
+                    <input type="hidden" id="ofertaId">
+                    
+                    <div class="form-group">
+                        <label>Nome do Produto *</label>
+                        <input type="text" id="ofertaNome" placeholder="Ex: Banana Prata" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Unidade de Medida</label>
+                        <select id="ofertaUnidade">
+                            <option value="Kg">Kg (Quilograma)</option>
+                            <option value="Unidade">Unidade</option>
+                            <option value="Dúzia">Dúzia</option>
+                            <option value="Maço">Maço</option>
+                            <option value="Bandeja">Bandeja</option>
+                            <option value="Pacote">Pacote</option>
+                        </select>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Preço Original (R$)</label>
+                            <input type="number" id="ofertaPrecoOriginal" step="0.01" placeholder="5.99">
+                        </div>
+                        <div class="form-group">
+                            <label>Preço da Oferta (R$) *</label>
+                            <input type="number" id="ofertaPrecoOferta" step="0.01" placeholder="3.99" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Foto do Produto</label>
+                        <div class="image-upload" onclick="document.getElementById('ofertaFotoInput').click()">
+                            <i class="fas fa-camera"></i>
+                            <p>Clique para adicionar foto</p>
+                            <input type="file" id="ofertaFotoInput" accept="image/*" style="display: none;" onchange="previewOfertaFoto(this)">
+                        </div>
+                        <img id="ofertaFotoPreview" class="image-preview" style="display: none;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="ofertaAtivo" checked>
+                            Oferta Ativa (visível no site)
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeOfertaModal()">Cancelar</button>
+                <button class="btn btn-success" onclick="salvarOferta()">
+                    <i class="fas fa-save"></i> Salvar Oferta
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ===== Credenciais (em produção, usar backend seguro) =====
+        let ADMIN_USER = 'admin';
+        let ADMIN_PASS = 'varejao123';
+        
+        // Carregar senha salva se existir
+        const savedPass = localStorage.getItem('admin_password');
+        if (savedPass) {
+            ADMIN_PASS = savedPass;
+        }
+        
+        // ===== Ofertas =====
+        let ofertas = JSON.parse(localStorage.getItem('varejao_ofertas') || '[]');
+        
+        // ===== Login =====
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminContainer').classList.add('active');
+                sessionStorage.setItem('admin_logged', 'true');
+                loadOfertas();
+                carregarCategorias();
+            } else {
+                alert('Usuário ou senha incorretos!');
+            }
+        });
+        
+        // Verificar se já está logado
+        if (sessionStorage.getItem('admin_logged') === 'true') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminContainer').classList.add('active');
+            loadOfertas();
+            carregarCategorias();
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('admin_logged');
+            location.reload();
+        }
+        
+        // ===== Navegação =====
+        function showSection(sectionId) {
+            // Esconder todas as seções
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            // Mostrar a seção selecionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Atualizar menu ativo
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            document.querySelector(`a[href="#${sectionId}"]`).classList.add('active');
+        }
+        
+        // ===== Ofertas =====
+        function loadOfertas() {
+            const tbody = document.getElementById('ofertasTable');
+            const noOfertas = document.getElementById('noOfertas');
+            const totalOfertas = document.getElementById('totalOfertas');
+            
+            if (ofertas.length === 0) {
+                tbody.innerHTML = '';
+                noOfertas.style.display = 'block';
+                totalOfertas.textContent = '0';
+                return;
+            }
+            
+            noOfertas.style.display = 'none';
+            totalOfertas.textContent = ofertas.filter(o => o.ativo).length;
+            
+            tbody.innerHTML = ofertas.map((oferta, index) => `
+                <tr>
+                    <td><img src="${oferta.imagem || 'https://via.placeholder.com/50'}" alt="${oferta.nome}" class="oferta-img"></td>
+                    <td><strong>${oferta.nome}</strong><br><small>${oferta.unidade}</small></td>
+                    <td>R$ ${(oferta.precoOriginal || 0).toFixed(2)}</td>
+                    <td><strong style="color: var(--primary);">R$ ${oferta.precoOferta.toFixed(2)}</strong></td>
+                    <td>${oferta.precoOriginal ? Math.round((1 - oferta.precoOferta / oferta.precoOriginal) * 100) + '%' : '-'}</td>
+                    <td><span class="badge ${oferta.ativo ? 'badge-success' : 'badge-danger'}">${oferta.ativo ? 'Ativo' : 'Inativo'}</span></td>
+                    <td class="actions">
+                        <button class="btn btn-icon btn-primary" onclick="editarOferta(${index})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-icon btn-danger" onclick="excluirOferta(${index})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function openOfertaModal(index = null) {
+            document.getElementById('ofertaModal').classList.add('active');
+            document.getElementById('ofertaForm').reset();
+            document.getElementById('ofertaFotoPreview').style.display = 'none';
+            document.getElementById('ofertaId').value = '';
+            document.getElementById('modalTitle').textContent = 'Nova Oferta';
+            
+            if (index !== null) {
+                const oferta = ofertas[index];
+                document.getElementById('ofertaId').value = index;
+                document.getElementById('modalTitle').textContent = 'Editar Oferta';
+                document.getElementById('ofertaNome').value = oferta.nome;
+                document.getElementById('ofertaUnidade').value = oferta.unidade;
+                document.getElementById('ofertaPrecoOriginal').value = oferta.precoOriginal || '';
+                document.getElementById('ofertaPrecoOferta').value = oferta.precoOferta;
+                document.getElementById('ofertaAtivo').checked = oferta.ativo;
+                
+                if (oferta.imagem) {
+                    document.getElementById('ofertaFotoPreview').src = oferta.imagem;
+                    document.getElementById('ofertaFotoPreview').style.display = 'block';
+                }
+            }
+        }
+        
+        function closeOfertaModal() {
+            document.getElementById('ofertaModal').classList.remove('active');
+        }
+        
+        function previewOfertaFoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('ofertaFotoPreview').src = e.target.result;
+                    document.getElementById('ofertaFotoPreview').style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        function salvarOferta() {
+            const id = document.getElementById('ofertaId').value;
+            const nome = document.getElementById('ofertaNome').value;
+            const unidade = document.getElementById('ofertaUnidade').value;
+            const precoOriginal = parseFloat(document.getElementById('ofertaPrecoOriginal').value) || 0;
+            const precoOferta = parseFloat(document.getElementById('ofertaPrecoOferta').value);
+            const ativo = document.getElementById('ofertaAtivo').checked;
+            const fotoPreview = document.getElementById('ofertaFotoPreview');
+            
+            if (!nome || !precoOferta) {
+                alert('Preencha os campos obrigatórios!');
+                return;
+            }
+            
+            const oferta = {
+                nome,
+                unidade,
+                precoOriginal,
+                precoOferta,
+                ativo,
+                imagem: fotoPreview.style.display !== 'none' ? fotoPreview.src : 'https://via.placeholder.com/300x300?text=' + encodeURIComponent(nome)
+            };
+            
+            if (id !== '') {
+                ofertas[parseInt(id)] = oferta;
+            } else {
+                ofertas.push(oferta);
+            }
+            
+            localStorage.setItem('varejao_ofertas', JSON.stringify(ofertas));
+            closeOfertaModal();
+            loadOfertas();
+            alert('Oferta salva com sucesso!');
+        }
+        
+        function editarOferta(index) {
+            openOfertaModal(index);
+        }
+        
+        function excluirOferta(index) {
+            if (confirm('Tem certeza que deseja excluir esta oferta?')) {
+                ofertas.splice(index, 1);
+                localStorage.setItem('varejao_ofertas', JSON.stringify(ofertas));
+                loadOfertas();
+            }
+        }
+        
+        // ===== Salvar Informações =====
+        function salvarInformacoes() {
+            const info = {
+                nome: document.getElementById('infoNome').value,
+                slogan: document.getElementById('infoSlogan').value,
+                telefone: document.getElementById('infoTelefone').value,
+                whatsapp: document.getElementById('infoWhatsapp').value,
+                instagram: document.getElementById('infoInstagram').value,
+                facebook: document.getElementById('infoFacebook').value,
+                rua: document.getElementById('infoRua').value,
+                bairro: document.getElementById('infoBairro').value,
+                cidade: document.getElementById('infoCidade').value,
+                cep: document.getElementById('infoCep').value
+            };
+            
+            localStorage.setItem('varejao_info', JSON.stringify(info));
+            alert('Informações salvas com sucesso!');
+        }
+        
+        // ===== Salvar Horários =====
+        function salvarHorarios() {
+            const horarios = {
+                semana: document.getElementById('horarioSemana').value,
+                sabado: document.getElementById('horarioSabado').value,
+                domingo: document.getElementById('horarioDomingo').value,
+                feriado: document.getElementById('horarioFeriado').value
+            };
+            
+            localStorage.setItem('varejao_horarios', JSON.stringify(horarios));
+            alert('Horários salvos com sucesso!');
+        }
+        
+        // ===== Salvar Configurações =====
+        function salvarConfiguracoes() {
+            const config = {
+                ofertas: document.getElementById('configOfertas').checked,
+                depoimentos: document.getElementById('configDepoimentos').checked,
+                estatisticas: document.getElementById('configEstatisticas').checked,
+                newsletter: document.getElementById('configNewsletter').checked
+            };
+            
+            localStorage.setItem('varejao_config', JSON.stringify(config));
+            alert('Configurações salvas com sucesso!');
+        }
+        
+        // ===== Alterar Senha =====
+        function alterarSenha() {
+            const nova = document.getElementById('novaSenha').value;
+            const confirmar = document.getElementById('confirmarSenha').value;
+            
+            if (nova.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres!');
+                return;
+            }
+            
+            if (nova !== confirmar) {
+                alert('As senhas não conferem!');
+                return;
+            }
+            
+            localStorage.setItem('admin_password', nova);
+            ADMIN_PASS = nova;
+            alert('Senha alterada com sucesso!');
+            document.getElementById('novaSenha').value = '';
+            document.getElementById('confirmarSenha').value = '';
+        }
+        
+        // ===== Upload de Fotos =====
+        document.getElementById('fotoInput').addEventListener('change', function(e) {
+            const preview = document.getElementById('fotoPreview');
+            preview.innerHTML = '';
+            
+            Array.from(e.target.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'display: inline-block; margin: 10px; text-align: center;';
+                    div.innerHTML = `
+                        <img src="${event.target.result}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;">
+                        <p style="font-size: 0.8rem; color: var(--gray-600); margin-top: 5px;">${file.name}</p>
+                    `;
+                    preview.appendChild(div);
+                    
+                    // Salvar foto no localStorage
+                    let fotos = JSON.parse(localStorage.getItem('varejao_fotos') || '[]');
+                    fotos.push({
+                        nome: file.name,
+                        data: event.target.result,
+                        dataUpload: new Date().toISOString()
+                    });
+                    localStorage.setItem('varejao_fotos', JSON.stringify(fotos));
+                }
+                reader.readAsDataURL(file);
+            });
+            
+            alert('Fotos carregadas! Você pode usá-las nas ofertas.');
+        });
+        
+        // Carregar informações salvas
+        function carregarDadosSalvos() {
+            const info = JSON.parse(localStorage.getItem('varejao_info') || '{}');
+            if (info.nome) document.getElementById('infoNome').value = info.nome;
+            if (info.slogan) document.getElementById('infoSlogan').value = info.slogan;
+            if (info.telefone) document.getElementById('infoTelefone').value = info.telefone;
+            if (info.whatsapp) document.getElementById('infoWhatsapp').value = info.whatsapp;
+            if (info.instagram) document.getElementById('infoInstagram').value = info.instagram;
+            if (info.facebook) document.getElementById('infoFacebook').value = info.facebook;
+            if (info.rua) document.getElementById('infoRua').value = info.rua;
+            if (info.bairro) document.getElementById('infoBairro').value = info.bairro;
+            if (info.cidade) document.getElementById('infoCidade').value = info.cidade;
+            if (info.cep) document.getElementById('infoCep').value = info.cep;
+            
+            const horarios = JSON.parse(localStorage.getItem('varejao_horarios') || '{}');
+            if (horarios.semana) document.getElementById('horarioSemana').value = horarios.semana;
+            if (horarios.sabado) document.getElementById('horarioSabado').value = horarios.sabado;
+            if (horarios.domingo) document.getElementById('horarioDomingo').value = horarios.domingo;
+            if (horarios.feriado) document.getElementById('horarioFeriado').value = horarios.feriado;
+            
+            const config = JSON.parse(localStorage.getItem('varejao_config') || '{}');
+            if (config.ofertas !== undefined) document.getElementById('configOfertas').checked = config.ofertas;
+            if (config.depoimentos !== undefined) document.getElementById('configDepoimentos').checked = config.depoimentos;
+            if (config.estatisticas !== undefined) document.getElementById('configEstatisticas').checked = config.estatisticas;
+            if (config.newsletter !== undefined) document.getElementById('configNewsletter').checked = config.newsletter;
+            
+            // Carregar categorias
+            carregarCategorias();
+        }
+        
+        // ===== Funções de Categorias =====
+        const categoriasList = ['Frutas', 'Verduras', 'Legumes', 'Temperos', 'Ovos', 'Mercearia'];
+        
+        function previewCategoriaImg(categoria) {
+            const url = document.getElementById('url' + categoria).value;
+            if (url) {
+                document.getElementById('img' + categoria).src = url;
+            }
+        }
+        
+        function uploadCategoriaImg(input, categoria) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('img' + categoria).src = e.target.result;
+                    document.getElementById('url' + categoria).value = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        function salvarCategorias() {
+            const categorias = {};
+            
+            categoriasList.forEach(cat => {
+                categorias[cat.toLowerCase()] = {
+                    imagem: document.getElementById('img' + cat).src,
+                    descricao: document.getElementById('desc' + cat).value,
+                    quantidade: document.getElementById('qtd' + cat).value
+                };
+            });
+            
+            localStorage.setItem('varejao_categorias', JSON.stringify(categorias));
+            alert('Categorias salvas com sucesso! As alterações já estão visíveis no site.');
+        }
+        
+        function carregarCategorias() {
+            const categorias = JSON.parse(localStorage.getItem('varejao_categorias') || '{}');
+            
+            categoriasList.forEach(cat => {
+                const catData = categorias[cat.toLowerCase()];
+                if (catData) {
+                    if (catData.imagem) {
+                        document.getElementById('img' + cat).src = catData.imagem;
+                        document.getElementById('url' + cat).value = catData.imagem;
+                    }
+                    if (catData.descricao) document.getElementById('desc' + cat).value = catData.descricao;
+                    if (catData.quantidade) document.getElementById('qtd' + cat).value = catData.quantidade;
+                }
+            });
+        }
+        
+        carregarDadosSalvos();
+    </script>
+</body>
+</html>
