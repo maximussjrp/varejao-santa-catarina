@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de Preços - Varejão Santa Catarina</title>
+    <meta name="description" content="Confira os preços atualizados de frutas, verduras e legumes do Varejão Santa Catarina em São José do Rio Preto.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .header .voltar {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .header .voltar:hover {
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        /* Busca */
+        .busca-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .busca-input {
+            width: 100%;
+            padding: 15px 20px;
+            padding-left: 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            outline: none;
+            transition: box-shadow 0.3s;
+        }
+
+        .busca-input:focus {
+            box-shadow: 0 4px 20px rgba(46, 125, 50, 0.3);
+        }
+
+        .busca-wrapper {
+            position: relative;
+        }
+
+        .busca-wrapper i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        /* Filtros */
+        .filtros {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 20px;
+            flex-wrap: wrap;
+        }
+
+        .filtro-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filtro-btn.verduras { background: #e8f5e9; color: #2e7d32; }
+        .filtro-btn.legumes { background: #fff8e1; color: #f9a825; }
+        .filtro-btn.frutas { background: #e3f2fd; color: #1565c0; }
+        .filtro-btn.todos { background: #fff; color: #333; }
+
+        .filtro-btn:hover, .filtro-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .filtro-btn.verduras.active { background: #2e7d32; color: white; }
+        .filtro-btn.legumes.active { background: #f9a825; color: white; }
+        .filtro-btn.frutas.active { background: #1565c0; color: white; }
+        .filtro-btn.todos.active { background: #333; color: white; }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Categoria */
+        .categoria-precos {
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .categoria-header {
+            padding: 20px 25px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .categoria-icone {
+            font-size: 2rem;
+        }
+
+        .categoria-header h3 {
+            font-size: 1.5rem;
+            flex: 1;
+        }
+
+        .categoria-count {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* Grid de Produtos */
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .produto-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #2e7d32;
+        }
+
+        .produto-card.em-falta {
+            opacity: 0.6;
+            background: #ffebee;
+        }
+
+        .produto-nome {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        .produto-preco {
+            color: #2e7d32;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .produto-unidade {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .badge-falta {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #d32f2f;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        /* Info atualização */
+        .info-atualizacao {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .info-atualizacao i {
+            color: #2e7d32;
+            margin-right: 5px;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            text-decoration: none;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.5);
+        }
+
+        /* Resultados busca */
+        .resultados-busca {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .resultados-busca.active {
+            display: block;
+        }
+
+        .resultados-busca h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .resultado-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .resultado-item .categoria-tag {
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .header .voltar {
+                position: relative;
+                left: auto;
+                top: auto;
+                transform: none;
+                display: block;
+                margin-bottom: 10px;
+                text-align: left;
+            }
+
+            .produtos-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .produto-card {
+                padding: 12px;
+            }
+
+            .produto-nome {
+                font-size: 0.85rem;
+            }
+
+            .produto-preco {
+                font-size: 1.1rem;
+            }
+
+            .categoria-header h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .produtos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .busca-container, .filtros, .whatsapp-float {
+                display: none;
+            }
+
+            .categoria-precos {
+                break-inside: avoid;
+                margin-bottom: 20px;
+            }
+
+            .produtos-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="voltar"><i class="fas fa-arrow-left"></i></a>
+        <h1>🛒 Tabela de Preços</h1>
+        <p>Varejão Santa Catarina - Preços Atualizados</p>
+    </header>
+
+    <!-- Busca -->
+    <div class="busca-container">
+        <div class="busca-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" class="busca-input" id="busca" placeholder="Buscar produto... (ex: banana, tomate)">
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros">
+        <button class="filtro-btn todos active" onclick="filtrar('todos')">
+            <i class="fas fa-th"></i> Todos
+        </button>
+        <button class="filtro-btn verduras" onclick="filtrar('verduras')">
+            🥬 Verduras
+        </button>
+        <button class="filtro-btn legumes" onclick="filtrar('legumes')">
+            🥕 Legumes
+        </button>
+        <button class="filtro-btn frutas" onclick="filtrar('frutas')">
+            🍎 Frutas
+        </button>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="container">
+        <!-- Resultados de Busca -->
+        <div class="resultados-busca" id="resultados-busca">
+            <h3><i class="fas fa-search"></i> Resultados da busca</h3>
+            <div id="lista-resultados"></div>
+        </div>
+
+        <!-- Tabela de Preços -->
+        <div id="tabela-precos"></div>
+
+        <!-- Info -->
+        <div class="info-atualizacao">
+            <i class="fas fa-sync-alt"></i> Preços atualizados em Janeiro/2026
+            <br>
+            <small>* Preços sujeitos a alteração sem aviso prévio</small>
+        </div>
+    </div>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/5517991447419?text=Olá! Vi a tabela de preços e gostaria de fazer um pedido." class="whatsapp-float" title="Fazer pedido pelo WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script src="js/produtos.js"></script>
+    <script>
+        // Renderizar produtos ao carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            renderizarProdutos();
+        });
+
+        // Filtrar por categoria
+        function filtrar(categoria) {
+            // Atualizar botões
+            document.querySelectorAll('.filtro-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.filtro-btn.${categoria}`).classList.add('active');
+
+            // Mostrar/ocultar categorias
+            const categorias = document.querySelectorAll('.categoria-precos');
+            
+            if (categoria === 'todos') {
+                categorias.forEach(cat => cat.style.display = 'block');
+            } else {
+                categorias.forEach(cat => {
+                    if (cat.id === `cat-${categoria}`) {
+                        cat.style.display = 'block';
+                    } else {
+                        cat.style.display = 'none';
+                    }
+                });
+            }
+
+            // Limpar busca
+            document.getElementById('busca').value = '';
+            document.getElementById('resultados-busca').classList.remove('active');
+        }
+
+        // Busca de produtos
+        document.getElementById('busca').addEventListener('input', function(e) {
+            const termo = e.target.value.trim();
+            const resultadosDiv = document.getElementById('resultados-busca');
+            const listaResultados = document.getElementById('lista-resultados');
+            const tabelaPrecos = document.getElementById('tabela-precos');
+
+            if (termo.length < 2) {
+                resultadosDiv.classList.remove('active');
+                tabelaPrecos.style.display = 'block';
+                return;
+            }
+
+            const resultados = buscarProdutos(termo);
+            
+            if (resultados.length > 0) {
+                let html = '';
+                resultados.forEach(produto => {
+                    const emFalta = produto.emFalta ? '<span style="color: #d32f2f; font-size: 0.8rem;"> (EM FALTA)</span>' : '';
+                    html += `
+                        <div class="resultado-item">
+                            <div>
+                                <strong>${produto.nome}</strong>${emFalta}
+                                <br>
+                                <span class="categoria-tag" style="background-color: ${produto.cor}">${produto.categoria}</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <strong style="color: #2e7d32; font-size: 1.2rem;">${formatarPreco(produto.preco)}</strong>
+                                <br>
+                                <small style="color: #666;">/${produto.unidade}</small>
+                            </div>
+                        </div>
+                    `;
+                });
+                listaResultados.innerHTML = html;
+                resultadosDiv.classList.add('active');
+                tabelaPrecos.style.display = 'none';
+            } else {
+                listaResultados.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Nenhum produto encontrado 😕</p>';
+                resultadosDiv.classList.add('active');
+                tabelaPrecos.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
